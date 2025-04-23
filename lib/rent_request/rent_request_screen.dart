@@ -119,6 +119,7 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
       "account_no": accountNoController.text.toString(),
       "ifse": ifscController.text.toString(),
       "beneficiary_name": beneficiaryNameController.text.toString(),
+      "Unit_No": HomeProvider.homeSharedInstanace.getPropertiesDetails?.unit_no??"",
 
 
 
@@ -322,14 +323,14 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
                                                             const Color(0xFFFF3803),
                                                             11,
                                                             FontWeight.bold),
-                                                        const SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Image.asset(
-                                                          "assets/forword.png",
-                                                          height: 8,
-                                                          width: 8,
-                                                        ),
+                                                        // const SizedBox(
+                                                        //   width: 5,
+                                                        // ),
+                                                        // Image.asset(
+                                                        //   "assets/forword.png",
+                                                        //   height: 8,
+                                                        //   width: 8,
+                                                        // ),
                                                       ],
                                                     ),
                                                   ),

@@ -923,8 +923,6 @@ class _AddBookingState extends State<AddBooking> {
             ):Padding(
               padding: const EdgeInsets.all(20.0),
               child: BaseButton(onPress: (){
-                //String getNames=  printSelectedNames();
-
                 if(HomeProvider.homeSharedInstanace.selectedIndices.isEmpty)
                   {
                     Fluttertoast.showToast(
@@ -953,10 +951,7 @@ class _AddBookingState extends State<AddBooking> {
                   setState(() {
                     isLoading=true;
                   });
-
                   addDataToServer();
-
-
                 }
               }, title: "Book Amenities",borderradius: 10,),
             )
@@ -1034,6 +1029,7 @@ class _AddBookingState extends State<AddBooking> {
       "person_adult": _counter.toString(),
       "person_Child": _childrentCounter.toString(),
       "booking_time": "${_hourController.text}:${_minuteController.text} ${isAmSelected?"AM":"PM"}",
+      "Unit_No" :HomeProvider.homeSharedInstanace.getPropertiesDetails?.unit_no??""
       // Add any other required fields in the request body
     };
     print(jsonEncode(requestBody));

@@ -188,8 +188,10 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                           Text(
                                             item.time != null?(item.date! + item.time!):item.timestamp!,
                                             style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
+                                              fontWeight: FontWeight.w500,
+                                              // overflow: TextOverflow.fade
                                             ),
+                                            // maxLines: 2,
                                           ),
                                         ],
                                       ),

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "132854006365",
-    "project_id": "neoteric-242a5",
-    "storage_bucket": "neoteric-242a5.firebasestorage.app"
+    "project_number": "195655496307",
+    "project_id": "neotricapp",
+    "storage_bucket": "neotricapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:132854006365:android:6917afa0463f74c62e03b4",
+        "mobilesdk_app_id": "1:195655496307:android:89983dc6e471e115fcf006",
         "android_client_info": {
-          "package_name": "com.example.neoteric"
-        }
+          "package_name": "com.nerotric.neroticapp"
+        } 
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCcuEiPN3_t14Aqc1gwEEvzbDNNtibVhoE"
+          "current_key": "AIzaSyAyE4rMRudBp9sRwkQ2sgt65IhSFR1kuic"
         }
       ],
       "services": {

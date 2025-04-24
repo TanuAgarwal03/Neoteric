@@ -446,3 +446,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
 }
+
+
+
+//  {"user_info":{"name":"Tanu","contact":"8562805228","email":"tanu@gmail.com","address":"asfgh, mansarovar","country":"India","city":"jaipur","zipCode":"302020"},"paymentMethod":"Cash","status":"Pending","cart":[{"prices":{"originalPrice":159,"price":159,"discount":0},"_id":"677386aecd7081489d3174db","sku":"EDA007525903B","barcode":"6922437918451","title":{"en":"For Samsung Galaxy S24+ 5G Shockproof Clear Gradient PC + TPU Phone 
+// Case(Red)"},"description":{"en":"1. Creative appearance design, fashionable and personalized.\n2. Precisely designed to fit your phone.\n3. It fully protects the device from general scratches, dirt, tears and abrasions.\n4. All buttons and ports are accessible.\n5. With good performance and quality, it can work for a long time.\n6. Made of PC+TPU material, sturdy and durable.\n\nNote: The real object is subject to the title model, and the model machine in the picture is only for effect reference."},"slug":"for-samsung-galaxy-s24-5g-shockproof-clear-gradient-pc-tp

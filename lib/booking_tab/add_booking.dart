@@ -427,7 +427,7 @@ class _AddBookingState extends State<AddBooking> {
                                                           ),
                                                           addText(
                                                               "${propertyItem.project_name ??
-                                                                  ""}  ",
+                                                                  ""} (Unit- ${propertyItem.unit_no ?? ""}) ",
                                                                   // (Unit- ${propertyItem.unit_no ?? ""})
                                                               const Color(0xFF303030),
                                                               13,

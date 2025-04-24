@@ -1,12 +1,11 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.example.neoteric"
+    namespace = "com.nerotric.neroticapp"
     compileSdk = 34
     // ndkVersion = flutter.ndkVersion
     ndkVersion = "27.0.12077973"
@@ -23,20 +22,33 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.neoteric"
+        applicationId = "com.nerotric.neroticapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23
-        targetSdk = 33
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        targetSdk = 34
+        versionCode = 17
+        versionName = "1.1.4"
     }
+
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("../keystore/your_key.jks")
+//            storePassword = "your_store_password"
+//            keyAlias = "your_key_alias"
+//            keyPassword = "your_key_password"
+//        }
+//    }
+
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+//            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

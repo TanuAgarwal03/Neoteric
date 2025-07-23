@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.nerotric.neroticapp"
-    compileSdk = 34
+    compileSdk = 35
     // ndkVersion = flutter.ndkVersion
     ndkVersion = "27.0.12077973"
 
@@ -17,7 +17,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
-        // jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     defaultConfig {
@@ -26,9 +25,9 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23
-        targetSdk = 34
-        versionCode = 17
-        versionName = "1.1.4"
+        targetSdk = 35
+        versionCode = 20
+        versionName = "1.1.7"
     }
 
 //    signingConfigs {

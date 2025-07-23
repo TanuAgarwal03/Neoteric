@@ -17,35 +17,27 @@ class AddReferalScreen extends StatefulWidget {
 }
 
 class _AddReferalScreenState extends State<AddReferalScreen> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController appartmentController = TextEditingController();
+  TextEditingController referalNameController = TextEditingController();
+  TextEditingController referalPhoneController = TextEditingController();
+  TextEditingController referalEmailController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
-  TextEditingController nameController= TextEditingController();
-  TextEditingController phoneController= TextEditingController();
-  TextEditingController appartmentController= TextEditingController();
-  TextEditingController referalNameController= TextEditingController();
-  TextEditingController referalPhoneController= TextEditingController();
-  TextEditingController referalEmailController= TextEditingController();
-  TextEditingController descriptionController= TextEditingController();
-
-  bool isLoading= false;
-
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
     getSharedPerferenceData();
   }
 
-
   String? calling_no;
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -55,14 +47,14 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0xFFFFFFFF),
-                      Color(0xFFFEC3B4),
-                      Color(0xFFFF8F72),
-                    ],
-                    begin: AlignmentDirectional.bottomCenter,
-                    end: AlignmentDirectional.topCenter,
-                  )),
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0xFFFEC3B4),
+                  Color(0xFFFF8F72),
+                ],
+                begin: AlignmentDirectional.bottomCenter,
+                end: AlignmentDirectional.topCenter,
+              )),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +66,7 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       child: Row(
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Row(
@@ -84,40 +76,50 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                                   color: Colors.black,
                                   size: 28,
                                 ),
-                                addText('Back', Colors.black, 12,
-                                    FontWeight.w400),
+                                addText(
+                                    'Back', Colors.black, 12, FontWeight.w400),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width*0.65,
-                            child: addAlignedText('Add Referal', Colors.black, 14,
-                                FontWeight.w600),
+                            width: MediaQuery.of(context).size.width * 0.65,
+                            child: addAlignedText('Add Referal', Colors.black,
+                                14, FontWeight.w600),
                           ),
-                          SizedBox(width: MediaQuery.of(context).size.width*0.08,),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.08,
+                          ),
                           const WhatsappIcon(),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20,)
+                    const SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(left: 15,right: 15,),
+                padding: const EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     //SizedBox(height: 30,),
-                    const Text('User Name*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const Text(
+                      'User Name*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -130,20 +132,26 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                         controller: nameController,
                         enabled: false,
                         keyboardType: TextInputType.name,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 15,),
-                    const Text('Phone No*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Phone No*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -155,7 +163,7 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       child: TextField(
                         controller: phoneController,
                         enabled: false,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -163,13 +171,19 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 15,),
-                    const Text('Apartment no*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Apartment no*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -181,20 +195,26 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       child: TextField(
                         controller: appartmentController,
                         keyboardType: TextInputType.text,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 15,),
-                    const Text('Referral Name*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Referral Name*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -206,21 +226,26 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       child: TextField(
                         controller: referalNameController,
                         keyboardType: TextInputType.text,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-
-                    const SizedBox(height: 15,),
-                    const Text('Referral Phone no*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Referral Phone no*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -232,20 +257,26 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       child: TextField(
                         controller: referalPhoneController,
                         keyboardType: TextInputType.phone,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 15,),
-                    const Text('Referral Email*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Referral Email*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -257,21 +288,26 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                       child: TextField(
                         controller: referalEmailController,
                         keyboardType: TextInputType.emailAddress,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-
-                    const SizedBox(height: 15,),
-                    const Text('Description*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Description*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       // height: 65,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -285,108 +321,120 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
                         keyboardType: TextInputType.multiline,
                         maxLines: 12,
                         controller: descriptionController,
-
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-
-
-
-                    const SizedBox(height: 45,),
-                    isLoading ?  const SpinKitChasingDots(
-                      //  isLoading? SpinKitRotatingCircle(
-                      color: Colors.red,
-                      size: 80.0,
-                      //  controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
-                    ) :  GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          isLoading=true;
-                        });
-
-                       if(appartmentController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter Appartment no",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }else if(referalNameController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter Referal Name",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }else if(referalPhoneController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter Referal Phone",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }else if(descriptionController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter Description",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-
-                        }else{
-                          addDataToServer(nameController.text.toString(),
-                              appartmentController.text.toString(), phoneController.text.toString(), descriptionController.text.toString());
-
-
-                        }
-
-
-
-
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: const BoxDecoration(
-
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          gradient: LinearGradient(colors: [Color(0xffFF3D00), Color(0xffFF2E00)]),
-                        ),
-                        child: const Center(child: Padding(
-                          padding: EdgeInsets.only(top: 10,bottom: 10),
-                          child: Text('Submit',style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16
-                          ),),
-                        )),
-                      ),
+                    const SizedBox(
+                      height: 45,
                     ),
-                    const SizedBox(height: 28,),
+                    isLoading
+                        ? const SpinKitChasingDots(
+                            //  isLoading? SpinKitRotatingCircle(
+                            color: Colors.red,
+                            size: 80.0,
+                            //  controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isLoading = true;
+                              });
+
+                              if (appartmentController.text
+                                  .toString()
+                                  .isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter Appartment no",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (referalNameController.text
+                                  .toString()
+                                  .isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter Referal Name",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (referalPhoneController.text
+                                  .toString()
+                                  .isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter Referal Phone",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (descriptionController.text
+                                  .toString()
+                                  .isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter Description",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else {
+                                addDataToServer(
+                                    nameController.text.toString(),
+                                    appartmentController.text.toString(),
+                                    phoneController.text.toString(),
+                                    descriptionController.text.toString());
+                              }
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                                gradient: LinearGradient(colors: [
+                                  Color(0xffFF3D00),
+                                  Color(0xffFF2E00)
+                                ]),
+                              ),
+                              child: const Center(
+                                  child: Padding(
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                child: Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                              )),
+                            ),
+                          ),
+                    const SizedBox(
+                      height: 28,
+                    ),
                   ],
                 ),
               ),
@@ -397,21 +445,20 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
     );
   }
 
-  void addDataToServer(String name, String email, String phoneNo, String description) async {
-
+  void addDataToServer(
+      String name, String email, String phoneNo, String description) async {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
 
     final Map<String, dynamic> requestBody = {
-   /* "user_name":"Arjun",
+      /* "user_name":"Arjun",
     "user_contact":"9874456254",
     "user_apartment_no":"115",
     "referral_name":"Yuvraj",
     "referral_contact_no":"9787421452",
     "referral_email":"ak@gmail.com",
     "property_description":"2 BHK",*/
-
 
       "user_name": name,
       "user_contact": phoneNo,
@@ -424,8 +471,9 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
       // Add any other required fields in the request body
     };
 
-
-    final response = await http.post(Uri.parse('https://lytechxagency.website/Laravel_GoogleSheet/Property_referral'),
+    final response = await http.post(
+      Uri.parse(
+          'https://lytechxagency.website/Laravel_GoogleSheet/Property_referral'),
       headers: headers,
       body: jsonEncode(requestBody),
     );
@@ -435,17 +483,15 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
 
     if (response.statusCode == 200) {
       setState(() {
-        isLoading=false;
-       // nameController.text="";
-        appartmentController.text="";
-        referalNameController.text="";
-        referalPhoneController.text="";
-        referalEmailController.text="";
+        isLoading = false;
+        // nameController.text="";
+        appartmentController.text = "";
+        referalNameController.text = "";
+        referalPhoneController.text = "";
+        referalEmailController.text = "";
 
-        descriptionController.text="";
+        descriptionController.text = "";
       });
-
-
 
       print("contact_us======");
       print(response.body.toString());
@@ -462,43 +508,24 @@ class _AddReferalScreenState extends State<AddReferalScreen> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
           fontSize: 16.0);
-
-
-
-
-
-
-
     } else {
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
       throw Exception('Failed to load data');
     }
-
-
-
-
   }
+
 // DD:0F:66:97:21:59:29:00:B7:95:CF:4C:C5:23:3B:14:04:B3:78:B0:70:C5:CC:D2:8D:BE:B4:1C:0D:8F:3A:F7
   void getSharedPerferenceData() async {
-
-    SharedPreferences pref= await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     print(pref.getString("primary_customer_name"));
     print(pref.getString("primary_contact_no"));
 
     setState(() {
-
-      nameController.text=pref.getString("name").toString();
-      phoneController.text=pref.getString("primary_contact_no").toString();
-      calling_no=pref.getString("call_no").toString();
+      nameController.text = pref.getString("name").toString();
+      phoneController.text = pref.getString("primary_contact_no").toString();
+      calling_no = pref.getString("call_no").toString();
     });
-
-
-
-
-
-
-
   }
 }

@@ -41,13 +41,13 @@ dependencies:
   http:
   dio:
   provider:
-  fluttertoast: ^8.2.2
+  fluttertoast: ^8.2.12
   youtube_player_flutter: ^9.0.1
   shared_preferences: ^2.0.5
   flutter_spinkit: ^5.1.0
   carousel_slider:
   google_fonts: ^6.2.1
-  flutter_phone_direct_caller: ^2.1.1
+  flutter_phone_direct_caller: ^2.2.1
   #dropdown_search: 3.0.0
   # flutter_share:
   url_launcher:
@@ -61,6 +61,8 @@ dependencies:
   share_plus: ^11.0.0
 
   toggle_switch: ^2.3.0
+  webview_flutter: ^4.13.0
+  shimmer_animation: ^2.2.2
 
   #google_sign_in:
 

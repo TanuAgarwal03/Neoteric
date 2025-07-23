@@ -8,34 +8,39 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:neoteric_flutter/models/all_category_model.dart';
-// import 'package:neoteric_flutter/project_dropdown/project.dart';
-// import 'package:neoteric_flutter/models/property_tyype/view_all_proprerties_model.dart';
+import 'package:neoteric_flutter/project_dropdown/project.dart';
 import 'package:neoteric_flutter/providers/home_provider.dart';
+import 'package:neoteric_flutter/screens/home_tab.dart';
 import 'package:neoteric_flutter/utils/constants.dart';
 import 'package:neoteric_flutter/utils/utils.dart';
-import 'package:provider/provider.dart';
+import 'package:neoteric_flutter/widgets/navigation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/club_services_model.dart';
 import '../widgets/whatsappicon.dart';
 
 // ignore: must_be_immutable
-class ServiceRequestScreen extends StatefulWidget {
+class RentUserComplaintForm extends StatefulWidget {
   bool isHome;
 
-  ServiceRequestScreen({super.key, required this.isHome});
+  RentUserComplaintForm({super.key, required this.isHome});
 
   @override
-  State<ServiceRequestScreen> createState() => _ServiceRequestScreenState();
+  State<RentUserComplaintForm> createState() => _RentUserComplaintFormState();
 }
 
-class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
+class _RentUserComplaintFormState extends State<RentUserComplaintForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  //TextEditingController projectNameController= new TextEditingController();
   TextEditingController apartmentNoController = TextEditingController();
   TextEditingController narrationController = TextEditingController();
+  TextEditingController propertyNameController = TextEditingController();
 
   bool isLoading = false;
+
+  List<ProjectData> _projectList = [];
+  ProjectData? _selectedProject;
 
   List<AllCategoryModel> _ServiceInternalData = [];
   String? _selectedServiceInternal;
@@ -128,10 +133,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
   }
 
   Future<void> _uploadImage() async {
-    print('getloading==');
-    // print(isLoading);
-
-    SharedPreferences pref = await SharedPreferences.getInstance();
     String finalPath = "";
 
     if (image == null) {
@@ -140,24 +141,16 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
       finalPath = image!.path;
     }
     const url =
-        'https://lytechxagency.website/Laravel_GoogleSheet/ServiceRequest_store'; // Replace with your server's upload endpoint
+        'https://lytechxagency.website/Laravel_GoogleSheet/tatentServiceRequest'; // Replace with your server's upload endpoint
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.fields['contact_no'] = phoneController.text.toString();
-    request.fields['Narration'] = narrationController.text.toString();
-    request.fields['project_id'] =
-        HomeProvider.homeSharedInstanace.getPropertiesDetails?.property_id ??
-            "";
-    request.fields['projectname'] =
-        HomeProvider.homeSharedInstanace.getPropertiesDetails?.project_name ??
-            "";
-    request.fields['Request_Type'] = _selectedLocation.toString();
     request.fields['name'] = nameController.text.toString();
-    request.fields['Request_Category'] = _selectedRequestData!.toString();
-    //  request.fields['apartment_no'] =apartmentNoController.text.toString();
+    request.fields['contact_no'] = phoneController.text.toString();
+    request.fields['projectname'] = propertyNameController.text.toString();
+    request.fields['Request_Type'] = _selectedLocation.toString();
     request.fields['Request_About'] = _requestType;
-    request.fields['Unit_No'] =
-        HomeProvider.homeSharedInstanace.getPropertiesDetails?.unit_no ?? "";
+    request.fields['Request_Category'] = _selectedRequestData!.toString();
+    request.fields['Narration'] = narrationController.text.toString();
 
     if (image == null) {
       print("path_is_empty");
@@ -167,7 +160,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
       });
     } else {
       print("path_is_not_empty");
-      //final_path=image!.path;
       request.files.add(
         await http.MultipartFile.fromPath(
           'image',
@@ -194,13 +186,13 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
       setState(() {
         isLoading = false;
         image_text = "Choose file";
-        //  nameController.text="";
-        // phoneController.text="";
         narrationController.text = "";
         _selectedLocation = null;
         _selectedRequestData = null;
         _requestType = "";
       });
+      Navigator.of(context).pop();
+      pushTo(context, const HomeTabScreen());
     } else {
       print(response.reasonPhrase);
       Fluttertoast.showToast(
@@ -214,6 +206,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
       setState(() {
         isLoading = false;
       });
+      pushTo(context, const HomeTabScreen());
     }
   }
 
@@ -228,11 +221,14 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
   @override
   void initState() {
     super.initState();
-    _init();
     fetchDataInternal();
     fetchDataCampus();
     fetchRequestData();
     getDataFromSharedPreferance();
+    _init();
+    if (HomeProvider.homeSharedInstanace.getAllProject != null) {
+      _projectList = HomeProvider.homeSharedInstanace.getAllProject!;
+    }
   }
 
   Future<void> _init() async {
@@ -344,233 +340,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                         ],
                       ),
                     ),
-                    Consumer<HomeProvider>(
-                        builder: (context, getproperties, child) {
-                      return (getproperties.getProperties?.length ?? 0) > 0
-                          ? Column(
-                              children: [
-                                Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  color: Colors.white,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (getproperties.getPropertiesDetails !=
-                                          null)
-                                        Card(
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 5),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      addText(
-                                                          getproperties
-                                                                  .getPropertiesDetails
-                                                                  ?.project_name ??
-                                                              "",
-                                                          const Color(
-                                                              0xFF303030),
-                                                          13,
-                                                          FontWeight.w500),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Image.asset(
-                                                            "assets/location.png",
-                                                            height: 8,
-                                                            width: 8,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          addText(
-                                                              getproperties
-                                                                      .getPropertiesDetails
-                                                                      ?.location ??
-                                                                  "",
-                                                              const Color(
-                                                                  0xFF797979),
-                                                              10,
-                                                              FontWeight.w500),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: SizedBox(
-                                                    width: 110,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        getproperties
-                                                            .changeAllProperty(
-                                                                !getproperties
-                                                                    .showAllProperties);
-                                                      },
-                                                      child: Row(
-                                                        children: [
-                                                          addText(
-                                                              "Change Property",
-                                                              const Color(
-                                                                  0xFFFF3803),
-                                                              11,
-                                                              FontWeight.bold),
-                                                          // const SizedBox(
-                                                          //   width: 5,
-                                                          // ),
-                                                          // Transform.flip(
-                                                          //     flipY: getproperties
-                                                          //         .showAllProperties
-                                                          //         ? true
-                                                          //         : false,
-                                                          //     child:
-                                                          //     Image.asset(
-                                                          //       "assets/dropdown.png",
-                                                          //       height: 20,
-                                                          //       color: const Color(
-                                                          //           0xFFFF3803),
-                                                          //       width: 20,
-                                                          //     )),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                if (getproperties.showAllProperties) ...[
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      color: Colors.white,
-                                      child: ListView.builder(
-                                        itemCount: getproperties
-                                                .getProperties?.length ??
-                                            0,
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, index) {
-                                          final propertyItem = getproperties
-                                              .getProperties![index];
-                                          return InkWell(
-                                            onTap: () {
-                                              getproperties
-                                                  .changePropertyDetails(
-                                                      propertyItem);
-                                              getproperties.changeAllProperty(
-                                                  !getproperties
-                                                      .showAllProperties);
-                                            },
-                                            child: Card(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  side: BorderSide(
-                                                      color: propertyItem
-                                                                  .property_id
-                                                                  .toString() ==
-                                                              getproperties
-                                                                  .getPropertiesDetails!
-                                                                  .property_id
-                                                                  .toString()
-                                                          ? const Color(
-                                                              0xFFFF3803)
-                                                          : Colors.white)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                child: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          addText(
-                                                              "${propertyItem.project_name ?? ""} (Unit- ${propertyItem.unit_no ?? ""})",
-                                                              const Color(
-                                                                  0xFF303030),
-                                                              13,
-                                                              FontWeight.w500),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              Image.asset(
-                                                                "assets/location.png",
-                                                                height: 8,
-                                                                width: 8,
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              addText(
-                                                                  propertyItem
-                                                                          .location ??
-                                                                      "",
-                                                                  const Color(
-                                                                      0xFF797979),
-                                                                  10,
-                                                                  FontWeight
-                                                                      .w500),
-                                                            ],
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )),
-                                ]
-                              ],
-                            )
-                          : const SizedBox.shrink();
-                    }),
                   ],
                 ),
               ),
@@ -644,6 +413,84 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                   const SizedBox(
                     height: 15,
                   ),
+                  // const Text(
+                  //   'Property Name*',
+                  //   style: TextStyle(
+                  //       fontSize: 15,
+                  //       fontWeight: FontWeight.w500,
+                  //       color: Color(0xff1A1E25)),
+                  // ),
+                  // const SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //   decoration: BoxDecoration(
+                  //     color: const Color(0xffEFEFEF),
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     border: Border.all(
+                  //         color: const Color(0xffA1A1A1), width: 0.5),
+                  //   ),
+                  //   child: TextField(
+                  //     keyboardType: TextInputType.text,
+                  //     controller: propertyNameController,
+                  //     style: const TextStyle(fontSize: 16),
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintText: "Flat/House/Building No, Street Name",
+                  //         hintStyle: TextStyle(fontSize: 13)),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 15,
+                  // ),
+
+                  const Text(
+                    'Select Project*',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff1A1E25),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color(0xffA1A1A1), width: 0.5),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: const Color(0xffEFEFEF),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 15),
+                      child: DropdownButton<ProjectData>(
+                        underline: const SizedBox(),
+                        isExpanded: true,
+                        hint: const Text('Select Project',
+                            style: TextStyle(fontSize: 13)),
+                        value: _selectedProject,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        onChanged: (ProjectData? newValue) {
+                          setState(() {
+                            _selectedProject = newValue;
+                            propertyNameController.text = newValue?.name ?? "";
+                          });
+                        },
+                        items: _projectList.map((project) {
+                          return DropdownMenuItem<ProjectData>(
+                            value: project,
+                            child: Text(
+                              project.name,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   const Text(
                     'Request Type*',
                     style: TextStyle(
@@ -671,14 +518,12 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                         hint: const Text(
                           'Choose Request Type',
                           style: TextStyle(fontSize: 13),
-                        ), // Not necessary for Option 1
+                        ),
                         value: _selectedLocation,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         onChanged: (newValue) {
                           setState(() {
                             _selectedLocation = newValue;
-                            print('get_request=====');
-                            print(_selectedLocation);
                             _selectedRequestType = newValue!;
                           });
                         },
@@ -687,7 +532,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                             value: location,
                             child: new Text(
                               location,
-                              style: TextStyle(fontSize: 13),
+                              style: const TextStyle(fontSize: 13),
                             ),
                           );
                         }).toList(),
@@ -717,8 +562,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               color: const Color(0xffEFEFEF)),
-
-                          //  color: Colors.blue,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 15),
                             child: DropdownButton<String>(
@@ -727,23 +570,16 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                               hint: const Text(
                                 "Select Request",
                                 style: TextStyle(fontSize: 13),
-                              ), // Hint added here
+                              ),
                               value: _selectedServiceInternal,
                               onChanged: (String? newValue) {
                                 setState(() {
                                   _selectedServiceInternal = newValue;
-                                  print('getSelection======');
-                                  print(_selectedServiceInternal);
-                                  print(newValue);
                                   _requestType = newValue!;
                                 });
                               },
                               icon: const Icon(Icons.keyboard_arrow_down),
                               items: [
-                                /*  DropdownMenuItem(
-                            value: null,
-                            child: Text("Select Request"),
-                          ),*/
                                 ..._ServiceInternalData.map<
                                         DropdownMenuItem<String>>(
                                     (AllCategoryModel project) {
@@ -751,7 +587,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                                     value: project.name,
                                     child: Row(
                                       children: [
-                                        // SizedBox(width: 15),
                                         Text(
                                           project.name!,
                                           style: const TextStyle(fontSize: 13),
@@ -773,8 +608,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               color: const Color(0xffEFEFEF)),
-
-                          //  color: Colors.blue,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 15),
                             child: DropdownButton<String>(
@@ -783,23 +616,16 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                               hint: const Text(
                                 "Select Request",
                                 style: TextStyle(fontSize: 13),
-                              ), // Hint added here
+                              ),
                               value: _selectedServiceCampus,
                               onChanged: (String? newValue) {
                                 setState(() {
                                   _selectedServiceCampus = newValue;
-                                  print('getSelection======');
-                                  print(_selectedServiceCampus);
-                                  print(newValue);
                                   _requestType = newValue!;
                                 });
                               },
                               icon: const Icon(Icons.keyboard_arrow_down),
                               items: [
-                                /*  DropdownMenuItem(
-                            value: null,
-                            child: Text("Select Request"),
-                          ),*/
                                 ..._ServiceCampusData.map<
                                         DropdownMenuItem<String>>(
                                     (AllCategoryModel project) {
@@ -807,7 +633,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                                     value: project.name,
                                     child: Row(
                                       children: [
-                                        // SizedBox(width: 15),
                                         Text(
                                           project.name!,
                                           style: const TextStyle(fontSize: 13),
@@ -842,8 +667,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                         color: const Color(0xffEFEFEF)),
-
-                    //  color: Colors.blue,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10, right: 15),
                       child: DropdownButton<String>(
@@ -853,21 +676,14 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                         hint: const Text(
                           "Select Request Category",
                           style: TextStyle(fontSize: 13),
-                        ), // Hint added here
+                        ),
                         value: _selectedRequestData,
                         onChanged: (String? newValue) {
                           setState(() {
                             _selectedRequestData = newValue;
-                            print('getSelection======');
-                            print(_selectedRequestData);
-                            print(newValue);
                           });
                         },
                         items: [
-                          /* DropdownMenuItem(
-                            value: null,
-                            child: Text("Select Request Category"),
-                          ),*/
                           ..._ServiceRequestData.map<DropdownMenuItem<String>>(
                               (ClubServicesModel project) {
                             return DropdownMenuItem<String>(
@@ -883,13 +699,12 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                                     errorBuilder: (BuildContext? context,
                                         Object? exception,
                                         StackTrace? stackTrace) {
-                                      return SizedBox(
+                                      return const SizedBox(
                                         width: 30,
                                         height: 30,
                                       );
                                     },
                                   ),
-                                  // SizedBox(width: 15),
                                   const SizedBox(width: 15),
                                   Text(
                                     project.name!,
@@ -903,33 +718,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                       ),
                     ),
                   ),
-
-                  /* SizedBox(height: 8,),
-
-                  Text('Apartment No*',style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff1A1E25)
-                  ),),
-
-                  Container(
-                    height: 45,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Color(0xffEFEFEF),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0xffA1A1A1)),
-                    ),
-                    child: TextField(
-                      controller: apartmentNoController,
-                      style:TextStyle(fontSize:16),
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),*/
-
                   const SizedBox(
                     height: 15,
                   ),
@@ -944,7 +732,6 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                     height: 5,
                   ),
                   Container(
-                    // height: 65,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       color: const Color(0xffEFEFEF),
@@ -971,8 +758,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                       image = await chooseSourceSheet(
                           context, true, image, "profile");
                       if (image == null) return;
-                      if (image!.path.toString().isNotEmpty ||
-                          image!.path.toString() != null) {
+                      if (image!.path.toString().isNotEmpty) {
                         setState(() {
                           image_text = "Selected";
                         });
@@ -1125,6 +911,9 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                             )),
                           ),
                         ),
+                  const SizedBox(
+                    height: 50,
+                  )
                 ],
               ),
             ),

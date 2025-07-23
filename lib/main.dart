@@ -1,12 +1,14 @@
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
+// import 'dart:io';
+//
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:neoteric_flutter/firebase_api.dart';
+// import 'package:neoteric_flutter/complaint_section/rent_user_complaint_form.dart';
+// import 'package:neoteric_flutter/firebase_api.dart';
 import 'package:neoteric_flutter/providers/home_provider.dart';
+// import 'package:neoteric_flutter/screens/register_screen.dart';
 import 'package:neoteric_flutter/splashscreen/splash_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -103,8 +105,15 @@ class _MyAppState extends State<MyApp> {
           ],
         ),
         debugShowCheckedModeBanner: false,
+        // home: RentUserComplaintForm(
+        //   isHome: false,
+        // ),
         home: SplashScreen(fcmToken: fcm_token!),
       ),
     );
   }
 }
+
+
+
+//8828164859

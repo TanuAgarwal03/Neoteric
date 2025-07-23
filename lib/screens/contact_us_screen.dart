@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/constants.dart';
 import '../widgets/whatsappicon.dart';
@@ -19,48 +19,34 @@ class ContactUsScreen extends StatefulWidget {
 }
 
 class _ContactUsScreenState extends State<ContactUsScreen> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
-  TextEditingController nameController= TextEditingController();
-  TextEditingController phoneController= TextEditingController();
-  TextEditingController emailController= TextEditingController();
-  TextEditingController descriptionController= TextEditingController();
-
-  bool isLoading= false;
+  bool isLoading = false;
 
   String? calling_no;
 
   @override
   void initState() {
-   getSharedPerferenceData();
+    getSharedPerferenceData();
     super.initState();
   }
 
   void getSharedPerferenceData() async {
-
-    SharedPreferences pref= await SharedPreferences.getInstance();
-
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
     setState(() {
-
-      nameController.text=pref.getString("name").toString();
-      phoneController.text=pref.getString("primary_contact_no").toString();
-      calling_no=pref.getString("call_no").toString();
-
-
-
+      nameController.text = pref.getString("name").toString();
+      phoneController.text = pref.getString("primary_contact_no").toString();
+      calling_no = pref.getString("call_no").toString();
     });
-
-
-
-
-
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -70,14 +56,14 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0xFFFFFFFF),
-                      Color(0xFFFEC3B4),
-                      Color(0xFFFF8F72),
-                    ],
-                    begin: AlignmentDirectional.bottomCenter,
-                    end: AlignmentDirectional.topCenter,
-                  )),
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0xFFFEC3B4),
+                  Color(0xFFFF8F72),
+                ],
+                begin: AlignmentDirectional.bottomCenter,
+                end: AlignmentDirectional.topCenter,
+              )),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,8 +74,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       alignment: Alignment.center,
                       child: Row(
                         children: [
-                         InkWell(
-                            onTap: (){
+                          InkWell(
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Row(
@@ -99,17 +85,19 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                                   color: Colors.black,
                                   size: 28,
                                 ),
-                                addText('Back', Colors.black, 12,
-                                    FontWeight.w400),
+                                addText(
+                                    'Back', Colors.black, 12, FontWeight.w400),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width*0.65,
-                            child: addAlignedText('Contact Us', Colors.black, 14,
-                                FontWeight.w600),
+                            width: MediaQuery.of(context).size.width * 0.65,
+                            child: addAlignedText('Contact Us', Colors.black,
+                                14, FontWeight.w600),
                           ),
-                          SizedBox(width: MediaQuery.of(context).size.width*0.08,),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.08,
+                          ),
                           const WhatsappIcon(),
                         ],
                       ),
@@ -149,29 +137,30 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                     //         )),
                     //   ],
                     // ),
-                    const SizedBox(height: 20,)
+                    const SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(left: 15,right: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-
-
-
-
                     //SizedBox(height: 30,),
-                    const Text('Full Name*',style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const Text(
+                      'Full Name*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -184,20 +173,26 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                         controller: nameController,
                         enabled: false,
                         keyboardType: TextInputType.name,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 15,),
-                    const Text('Phone No*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Phone No*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -209,7 +204,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       child: TextField(
                         controller: phoneController,
                         enabled: false,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -217,13 +212,19 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 15,),
-                    const Text('Email*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Email*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -235,23 +236,28 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       child: TextField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-
-                    const SizedBox(height: 15,),
-                    const Text('Description*',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1A1E25)
-                    ),),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Description*',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff1A1E25)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
-                     // height: 65,
+                      // height: 65,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         color: const Color(0xffF3F3F3),
@@ -263,109 +269,117 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                         keyboardType: TextInputType.multiline,
                         maxLines: 12,
                         controller: descriptionController,
-
-                        style:const TextStyle(fontSize:16),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
 
-
-
-
-                    const SizedBox(height: 45,),
-                    isLoading ?  const SpinKitChasingDots(
-                      //  isLoading? SpinKitRotatingCircle(
-                      color: Colors.red,
-                      size: 80.0,
-                      //  controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
-                    ) :
-                    GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          isLoading=true;
-                        });
-
-                        if(nameController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter name",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }else if(emailController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter Email",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }else if(descriptionController.text.toString().isEmpty){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter Description",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-
-                        }else if(phoneController.text.toString().isEmpty || phoneController.text.toString().length != 10){
-                          setState(() {
-                            isLoading=false;
-                          });
-                          Fluttertoast.showToast(
-                              msg: "Enter 10 digit phone no",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }else{
-                          addDataToServer(nameController.text.toString(),
-                              emailController.text.toString(), phoneController.text.toString(), descriptionController.text.toString());
-
-
-                        }
-
-
-
-
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: const BoxDecoration(
-
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          gradient: LinearGradient(colors: [Color(0xffFF3D00), Color(0xffFF2E00)]),
-                        ),
-                        child: const Center(child: Padding(
-                          padding: EdgeInsets.only(top: 10,bottom: 10),
-                          child: Text('Submit',style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16
-                          ),),
-                        )),
-                      ),
+                    const SizedBox(
+                      height: 45,
                     ),
+                    isLoading
+                        ? const SpinKitChasingDots(
+                            //  isLoading? SpinKitRotatingCircle(
+                            color: Colors.red,
+                            size: 80.0,
+                            //  controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isLoading = true;
+                              });
 
+                              if (nameController.text.toString().isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter name",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (emailController.text
+                                  .toString()
+                                  .isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter Email",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (descriptionController.text
+                                  .toString()
+                                  .isEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter Description",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (phoneController.text
+                                      .toString()
+                                      .isEmpty ||
+                                  phoneController.text.toString().length !=
+                                      10) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Enter 10 digit phone no",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else {
+                                addDataToServer(
+                                    nameController.text.toString(),
+                                    emailController.text.toString(),
+                                    phoneController.text.toString(),
+                                    descriptionController.text.toString());
+                              }
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                                gradient: LinearGradient(colors: [
+                                  Color(0xffFF3D00),
+                                  Color(0xffFF2E00)
+                                ]),
+                              ),
+                              child: const Center(
+                                  child: Padding(
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                child: Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                              )),
+                            ),
+                          ),
 
                     //SizedBox(height: 30,),
                     //
@@ -447,9 +461,11 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                     //     )),
                     //   ),
                     // ),
-                    const SizedBox(height: 28,),
+                    const SizedBox(
+                      height: 28,
+                    ),
 
-                /*    Column(
+                    /*    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 20,),
@@ -699,7 +715,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
                                   ],
                                 ),
-                                *//*  SizedBox(height: 15,),
+                                */ /*  SizedBox(height: 15,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -744,7 +760,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                                     )),
 
                               ],
-                            ),*//*
+                            ),*/ /*
                               ],
                             ),
                           ),
@@ -764,8 +780,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
     );
   }
 
-  void addDataToServer(String name, String email, String phoneNo, String description) async {
-
+  void addDataToServer(
+      String name, String email, String phoneNo, String description) async {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
@@ -779,23 +795,20 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
       // Add any other required fields in the request body
     };
 
-
-    final response = await http.post(Uri.parse('https://lytechxagency.website/Laravel_GoogleSheet/ContactUs'),
+    final response = await http.post(
+      Uri.parse('https://lytechxagency.website/Laravel_GoogleSheet/ContactUs'),
       headers: headers,
       body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 200) {
       setState(() {
-        isLoading=false;
-       // nameController.text="";
-        emailController.text="";
-        phoneController.text="";
-        descriptionController.text="";
+        isLoading = false;
+        // nameController.text="";
+        emailController.text = "";
+        phoneController.text = "";
+        descriptionController.text = "";
       });
-
-
-
 
       // final List result = jsonDecode(response.body);
       //  final Map<String, dynamic> data = json.decode(response.body);
@@ -803,13 +816,10 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
       // return dataList.map((itemJson) => GameListModel.fromJson(itemJson)).toList();
       // return result.map((e) => GameListModel.fromJson(e)).toList();
 
-
-     // final Map<String, dynamic> responseData = json.decode(response.body);
+      // final Map<String, dynamic> responseData = json.decode(response.body);
 
       print("contact_us======");
       //print(responseData.toString());
-
-
 
       final jsonResponse = json.decode(response.body);
 
@@ -823,22 +833,11 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
           fontSize: 16.0);
-
-
-
-
-
-
-
     } else {
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
       throw Exception('Failed to load data');
     }
-
-
-
-
   }
 }

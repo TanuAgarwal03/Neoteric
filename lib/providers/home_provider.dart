@@ -62,6 +62,9 @@ class HomeProvider extends ChangeNotifier {
   List<ClubServicesModel>? _getAllAmenties;
   List<ClubServicesModel>? get getAllAmentiesList => _getAllAmenties;
 
+  List<ClubServicesModel>? _getPriceList;
+  List<ClubServicesModel>? get getAllPriceList => _getPriceList;
+
   List<ClubServicesModel>? _getContactNumber;
   List<ClubServicesModel>? get getContactNumber => _getContactNumber;
 
@@ -219,6 +222,43 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getPriceList() async {
+    ApiResponseModel apiResponse = await _apiManager.request(
+      _apis.getAllamenties,
+      Method.get,
+      {},
+    );
+
+    if (apiResponse.status) {
+      final List<dynamic> dataList = apiResponse.data['requestData'];
+      _getPriceList = dataList
+          .map((data) => ClubServicesModel.fromJson(data))
+          .where((project) => project.type == 'price_list')
+          .toList();
+    } else {
+      throw HttpException(apiResponse.error!.description);
+    }
+    notifyListeners();
+  }
+
+  // Future<void> getPriceList() async {
+  //   ApiResponseModel apiResponse = await _apiManager.request(
+  //     _apis.getAllamenties,
+  //     Method.get,
+  //     {},
+  //   );
+  //   if (apiResponse.status) {
+  //     final List<dynamic> dataList = apiResponse.data['requestData'];
+  //     _getPriceList = dataList
+  //         .map((data) => ClubServicesModel.fromJson(data))
+  //         .where((project) => project.type == 'price_list')
+  //         .toList();
+  //   } else {
+  //     throw HttpException(apiResponse.error!.description);
+  //   }
+  //   notifyListeners();
+  // }
+
   Future<void> getOwenerContactNumber() async {
     ApiResponseModel apiResponse = await _apiManager.request(
       _apis.getAllamenties,
@@ -298,13 +338,13 @@ class HomeProvider extends ChangeNotifier {
       Method.get,
       {},
     );
-    print(' property Detail : $apiResponse');
+    // print(' property Detail : $apiResponse');
     if (apiResponse.status) {
       List<dynamic> propertyData = apiResponse.data['userData'];
       _getAllProperties = propertyData
           .map((data) => ViewAllPropertiesModel.fromJson(data))
           .toList();
-      print(propertyData);
+      // print(propertyData);
     } else {
       throw HttpException(apiResponse.error!.description);
     }

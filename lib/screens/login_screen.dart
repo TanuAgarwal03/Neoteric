@@ -149,13 +149,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   //   'This app is only for existing Neoteric customers',
                   //   style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
                   // ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Don\'t have an account? ',
+                        'If you\'re a tenant? ',
+                        // 'Don\'t have an account? ',
                         style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w700),
+                            fontSize: 14, fontWeight: FontWeight.w700),
                       ),
                       InkWell(
                         onTap: () {
@@ -168,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text(
                           'Register Now',
                           style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: Color(0xffFF3D00)),
                         ),

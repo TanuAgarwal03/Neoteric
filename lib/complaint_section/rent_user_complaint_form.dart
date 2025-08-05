@@ -147,6 +147,7 @@ class _RentUserComplaintFormState extends State<RentUserComplaintForm> {
     request.fields['name'] = nameController.text.toString();
     request.fields['contact_no'] = phoneController.text.toString();
     request.fields['projectname'] = propertyNameController.text.toString();
+    request.fields['apartment_no'] = apartmentNoController.text.toString();
     request.fields['Request_Type'] = _selectedLocation.toString();
     request.fields['Request_About'] = _requestType;
     request.fields['Request_Category'] = _selectedRequestData!.toString();
@@ -413,38 +414,6 @@ class _RentUserComplaintFormState extends State<RentUserComplaintForm> {
                   const SizedBox(
                     height: 15,
                   ),
-                  // const Text(
-                  //   'Property Name*',
-                  //   style: TextStyle(
-                  //       fontSize: 15,
-                  //       fontWeight: FontWeight.w500,
-                  //       color: Color(0xff1A1E25)),
-                  // ),
-                  // const SizedBox(
-                  //   height: 5,
-                  // ),
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //   decoration: BoxDecoration(
-                  //     color: const Color(0xffEFEFEF),
-                  //     borderRadius: BorderRadius.circular(10),
-                  //     border: Border.all(
-                  //         color: const Color(0xffA1A1A1), width: 0.5),
-                  //   ),
-                  //   child: TextField(
-                  //     keyboardType: TextInputType.text,
-                  //     controller: propertyNameController,
-                  //     style: const TextStyle(fontSize: 16),
-                  //     decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //         hintText: "Flat/House/Building No, Street Name",
-                  //         hintStyle: TextStyle(fontSize: 13)),
-                  //   ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 15,
-                  // ),
-
                   const Text(
                     'Select Project*',
                     style: TextStyle(
@@ -489,6 +458,38 @@ class _RentUserComplaintFormState extends State<RentUserComplaintForm> {
                         }).toList(),
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    'Apartment No.*',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff1A1E25)),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffEFEFEF),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: const Color(0xffA1A1A1), width: 0.5),
+                    ),
+                    child: TextField(
+                      keyboardType: TextInputType.text,
+                      controller: apartmentNoController,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "41-A",
+                          hintStyle: TextStyle(fontSize: 13)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
                   ),
                   const SizedBox(height: 15),
                   const Text(
@@ -819,6 +820,20 @@ class _RentUserComplaintFormState extends State<RentUserComplaintForm> {
                               });
                               Fluttertoast.showToast(
                                   msg: "Enter name",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else if (apartmentNoController.text
+                                .toString()
+                                .isEmpty) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: "Enter apartment number",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,

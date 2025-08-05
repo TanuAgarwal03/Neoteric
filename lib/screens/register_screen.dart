@@ -185,7 +185,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                     const Text(
                       'Already have an account? ',
                       style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                     ),
                     InkWell(
                       onTap: () {
@@ -197,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                       child: const Text(
                         'Login ',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Color(0xffFF3D00)),
                       ),
@@ -313,6 +313,23 @@ class _RegistrationScreenState extends State<RegistrationScreen>
               mobileno: mobileno,
               verification_id: jsonResponse['otp'].toString()),
         ));
+      } else if (jsonResponse['status'] == false &&
+          jsonResponse['msg'] ==
+              "User already registered with this contact number.") {
+        showDialogBoxLogout();
+        // Fluttertoast.showToast(
+        //   msg: jsonResponse['msg'],
+        //   toastLength: Toast.LENGTH_LONG,
+        //   gravity: ToastGravity.BOTTOM,
+        //   backgroundColor: Colors.black,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => OtpVerficationScreen(
+        //       mobileno: mobileno,
+        //       verification_id: jsonResponse['otp'].toString()),
+        // ));
       } else {
         setState(() {
           isLoading = false;
@@ -341,5 +358,32 @@ class _RegistrationScreenState extends State<RegistrationScreen>
         fontSize: 16.0,
       );
     }
+  }
+
+  showDialogBoxLogout() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Error"),
+        content: const Text("User already registered with this number."),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const LoginScreen(),
+              ));
+            },
+            child: Container(
+              color: Colors.red,
+              padding: const EdgeInsets.all(14),
+              child: const Text(
+                "Login Now",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

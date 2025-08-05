@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neoteric_flutter/screens/home_screen.dart';
+import 'package:neoteric_flutter/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../modules/widgets/base_button.dart';
@@ -22,31 +23,19 @@ class OtpVerficationScreen extends StatefulWidget {
 }
 
 class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   String? name;
   String? mobileNo;
   String? email;
-
   bool? _isVisible;
-
-  Future<void> verifyPhoneNumber(String phoneNumber) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    print("Method verifyPhoneNumber");
-    try {
-      final PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: widget.verification_id,
-        smsCode: usernameController.text.toString(),
-      );
-      final User user = (await auth.signInWithCredential(credential)).user!;
-      print(user.emailVerified);
-      print(user.phoneNumber);
-      print(user.displayName);
-      print(credential.smsCode);
-      getProfileData(phoneNumber);
-    } catch (e) {
-      print("Exception verifyPhoneNumber : $e");
-      getProfileData(phoneNumber);
-    }
-  }
+  late Timer _timer;
+  int _start = 5;
+  bool isLoading = false;
+  int secondsRemaining = 30;
+  bool enableResend = true;
+  Timer? timer;
+  bool _isRegistered = false;
 
   Future<void> getProfileData(String mobile) async {
     final response = await http.get(
@@ -59,16 +48,17 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print(responseData);
 
-      if (responseData['status'] == false) {
+      if (responseData['status'] == false &&
+          responseData['userData'] ==
+              "Your mobile number not register our database") {
         print('user_data====false');
         setState(() {
           isLoading = false;
         });
 
-        showDialogBoxLogout();
-
         Fluttertoast.showToast(
-          msg: responseData['userData'].toString(),
+          msg: "Fetching User Data..",
+          // msg: responseData['userData'].toString(),
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -76,10 +66,10 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        return; // Exit early to avoid further execution
+        await showDialogBoxLogout();
+        return;
       }
 
-      // Only reached when response.statusCode == 200 and responseData['status'] == true
       print('user_data====true');
       print(responseData['userData']['Name']);
       print(responseData['userData']['Contact No']);
@@ -119,9 +109,6 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
     }
   }
 
-  late Timer _timer;
-  int _start = 5;
-  bool isLoading = false;
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
@@ -176,19 +163,10 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
         });
       }
     });
-
     startTimer();
     startTimeout();
     _isVisible = false;
   }
-
-  // void _resendCode() {
-  //   //other code here
-  //   setState((){
-  //     secondsRemaining = 30;
-  //     enableResend = false;
-  //   });
-  // }
 
   @override
   dispose() {
@@ -197,25 +175,12 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
     _timer.cancel();
   }
 
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  int secondsRemaining = 30;
-  bool enableResend = true;
-  Timer? timer;
-
-  void verifyOtp() {
-    print('get_opt_widget====${widget.verification_id.toString()}');
-    print('get_opt_widget====${usernameController.text.toString()}');
-
+  void verifyOtp() async {
     if (widget.verification_id.toString() ==
         usernameController.text.toString()) {
-      // OTP is Valid
-      print('get_check====valid');
-
-      registerTenant();
-
-      getProfileData(widget.mobileno.toString());
+      checkRegistrationStatus();
+      // registerTenant();
+      // await getProfileData(widget.mobileno.toString());
     } else {
       setState(() {
         isLoading = false;
@@ -402,12 +367,13 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text("Error"),
-        content: const Text("User Data Not Found"),
+        content: const Text("User Not Found"),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               // logOut();
               Navigator.of(ctx).pop();
+              // Navigator.of(ctx).pop();
             },
             child: Container(
               color: Colors.red,
@@ -462,11 +428,72 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
         (Route<dynamic> route) => false);
   }
 
-  void registerTenant() async {
+  // void registerTenant() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   name = await prefs.getString('username');
+  //   email = await prefs.getString('email');
+  //   mobileNo = await prefs.getString('mobile');
+  //   final Map<String, String> headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   final Map<String, dynamic> requestBody = {
+  //     "name": name,
+  //     "email": email,
+  //     "contact_no": mobileNo,
+  //   };
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse(
+  //           'https://lytechxagency.website/Laravel_GoogleSheet/tanentRegister'),
+  //       headers: headers,
+  //       body: jsonEncode(requestBody),
+  //     );
+  //     final jsonResponse = jsonDecode(response.body);
+  //     if (response.statusCode == 200 && jsonResponse['status'] == true) {
+  //       Fluttertoast.showToast(
+  //         msg: "Login Successful",
+  //         toastLength: Toast.LENGTH_LONG,
+  //         gravity: ToastGravity.BOTTOM,
+  //         backgroundColor: Colors.black,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0,
+  //       );
+  //       // getProfileData(mobileNo!);
+  //     } else if (jsonResponse['msg'] ==
+  //         "User already registered with this contact number.") {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       // Fluttertoast.showToast(
+  //       //   msg: "Login sucess",
+  //       //   toastLength: Toast.LENGTH_LONG,
+  //       //   gravity: ToastGravity.BOTTOM,
+  //       //   backgroundColor: Colors.black,
+  //       //   textColor: Colors.white,
+  //       //   fontSize: 16.0,
+  //       // );
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     Fluttertoast.showToast(
+  //       msg: "Something went wrong.Try again.",
+  //       toastLength: Toast.LENGTH_LONG,
+  //       gravity: ToastGravity.BOTTOM,
+  //       backgroundColor: Colors.black,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0,
+  //     );
+  //   }
+  // }
+
+  Future<bool> registerTenant() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    name = await prefs.getString('username');
-    email = await prefs.getString('email');
-    mobileNo = await prefs.getString('mobile');
+    name = prefs.getString('username');
+    email = prefs.getString('email');
+    mobileNo = prefs.getString('mobile');
+
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
@@ -476,6 +503,8 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
       "email": email,
       "contact_no": mobileNo,
     };
+
+    print(" registerTenant() called");
 
     try {
       final response = await http.post(
@@ -488,42 +517,62 @@ class _OtpVerficationScreenState extends State<OtpVerficationScreen> {
       final jsonResponse = jsonDecode(response.body);
 
       if (response.statusCode == 200 && jsonResponse['status'] == true) {
+        print(" registerTenant() successs");
+        // ✅ Registered successfully
         Fluttertoast.showToast(
-          msg: "Login Successful",
+          msg: "Logging In ...",
           toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.black,
           textColor: Colors.white,
-          fontSize: 16.0,
         );
+        getProfileData(widget.mobileno.toString());
+        return true;
       } else if (jsonResponse['msg'] ==
           "User already registered with this contact number.") {
-        setState(() {
-          isLoading = false;
-        });
-
-        // Fluttertoast.showToast(
-        //   msg: "Login sucess",
-        //   toastLength: Toast.LENGTH_LONG,
-        //   gravity: ToastGravity.BOTTOM,
-        //   backgroundColor: Colors.black,
-        //   textColor: Colors.white,
-        //   fontSize: 16.0,
-        // );
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (Route<dynamic> route) => false);
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+      print("Error in registerTenant(): $e");
+      return false;
+    }
+  }
 
-      Fluttertoast.showToast(
-        msg: "Something went wrong.Try again.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+  void checkRegistrationStatus() async {
+    print("Check Registration Status: ${widget.mobileno}");
+
+    final response = await http.get(
+      Uri.parse(
+          "https://lytechxagency.website/Laravel_GoogleSheet/customer_detail?Phone=${widget.mobileno}"),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      print(responseData);
+
+      if (responseData['status'] == false &&
+          responseData['userData'] ==
+              "Your mobile number not register our database") {
+        print("User not registered");
+        setState(() {
+          _isRegistered = false;
+        });
+        print("registration status : $_isRegistered");
+        registerTenant();
+      } else if (responseData['status'] == true &&
+          responseData['meassage'] == "Customers Data Fetch SuccessFully !") {
+        setState(() {
+          _isRegistered = true;
+        });
+        getProfileData(widget.mobileno.toString());
+      } else {
+        return;
+      }
+      print("registration status : $_isRegistered  at the end");
     }
   }
 }
